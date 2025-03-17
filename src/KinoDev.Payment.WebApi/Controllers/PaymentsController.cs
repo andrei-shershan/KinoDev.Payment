@@ -20,7 +20,6 @@ public class PaymentsController : ControllerBase
     [HttpPost("create-payment-intent")]
     public async Task<IActionResult> CreatePaymentIntentAsync([FromBody] CreatePaymentIntentModel model)
     {
-        System.Console.WriteLine("************* CreatePaymentIntentAsync " + model.Metadata.Count());
         var clientSecret = await _stripeService.CreatePaymentIntentAsync(model.Amount, model.Metadata, model.Currency);
         if (clientSecret != null)
         {
