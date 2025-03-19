@@ -1,14 +1,12 @@
-using KinoDev.Payment.Infrastructure.Configuration;
 using KinoDev.Payment.Infrastructure.Models;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Stripe;
 
 namespace KinoDev.Payment.Infrastructure.Services
 {
     public interface IStripeService
     {
-        Task<string> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string> metadata, string currency = "usd");
+        Task<PaymentIntent> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string> metadata, string currency = "usd");
         Task<bool> ConfirmPaymentAsync(string paymentIntentId);
         Task<bool> CancelPaymentAsync(string paymentIntentId);
     }
@@ -20,11 +18,11 @@ namespace KinoDev.Payment.Infrastructure.Services
         {
             _stripeSettings = options.Value;
             StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
+            System.Console.WriteLine("KEY: " + _stripeSettings.SecretKey);
         }
 
-        public async Task<string> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string> metadata, string currency = "usd")
+        public async Task<PaymentIntent> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string> metadata, string currency = "usd")
         {
-            System.Console.WriteLine("************* " + JsonConvert.SerializeObject(metadata));
             var options = new PaymentIntentCreateOptions
             {
                 Amount = (long)(amount * 100), // Convert to cents
@@ -33,15 +31,13 @@ namespace KinoDev.Payment.Infrastructure.Services
                 {
                     "card",
                 },
-                Metadata = metadata?.Count() > 0 ? metadata : null
+                // Metadata = metadata?.Count() > 0 ? metadata : null
             };
 
+            // System.Console.WriteLine("Creating payment intent, options: {@options}", options);
+            System.Console.WriteLine("Creating payment intent, options//// " + options.Amount + " " + options.Currency + " " + options.PaymentMethodTypes + " " + options.Metadata);
             var service = new PaymentIntentService();
-            var paymentIntent = await service.CreateAsync(options);
-
-            // Save to DB
-
-            return paymentIntent.ClientSecret;
+            return  await service.CreateAsync(options);
         }
 
         public async Task<bool> ConfirmPaymentAsync(string paymentIntentId)
