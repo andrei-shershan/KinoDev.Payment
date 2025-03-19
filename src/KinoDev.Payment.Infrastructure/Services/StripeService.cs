@@ -31,7 +31,7 @@ namespace KinoDev.Payment.Infrastructure.Services
                 {
                     "card",
                 },
-                // Metadata = metadata?.Count() > 0 ? metadata : null
+                Metadata = metadata?.Count() > 0 ? metadata : null
             };
 
             // System.Console.WriteLine("Creating payment intent, options: {@options}", options);

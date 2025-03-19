@@ -36,7 +36,7 @@ public class PaymentsController : ControllerBase
             await _mongoDbService.Foo(paymentIntent.ClientSecret);
 
             System.Console.WriteLine("PaymentIntent saved to MongoDB");
-            return Ok(paymentIntent);
+            return Ok(paymentIntent.ClientSecret);
         }
         return BadRequest();
     }
