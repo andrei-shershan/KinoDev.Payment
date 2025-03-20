@@ -1,12 +1,8 @@
-using System.Threading.Tasks;
-using KinoDev.Payment.Infrastructure.Models;
-using KinoDev.Payment.Infrastructure.Services;
+using KinoDev.Payment.Infrastructure.MediatR.Commands;
 using KinoDev.Payment.WebApi.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
 
 namespace KinoDev.Payment.WebApi.Controllers;
 
@@ -15,38 +11,28 @@ namespace KinoDev.Payment.WebApi.Controllers;
 [Authorize]
 public class PaymentsController : ControllerBase
 {
-    private readonly IStripeService _stripeService;
-    private readonly IMongoDbService _mongoDbService;
+    private readonly IMediator _mediator;
 
-    public PaymentsController(IStripeService stripeService, IMongoDbService cosmosDbService)
+    public PaymentsController(IMediator mediator)
     {
-        _stripeService = stripeService;
-        _mongoDbService = cosmosDbService;
+        _mediator = mediator;
     }
 
     [HttpPost("create-payment-intent")]
     public async Task<IActionResult> CreatePaymentIntentAsync([FromBody] CreatePaymentIntentModel model)
     {
-        System.Console.WriteLine("CreatePaymentIntentAsync");
-        var paymentIntent = await  _stripeService.CreatePaymentIntentAsync(model.Amount, model.Metadata, model.Currency);
-        if (paymentIntent != null)
+        var result = await _mediator.Send(new CreatePaymentCommand()
         {
-            System.Console.WriteLine("PaymentIntent: ");
-            // Save payment intent to MongoDB
-            await _mongoDbService.Foo(paymentIntent.ClientSecret);
+            Amount = model.Amount,
+            Currency = model.Currency,
+            Metadata = model.Metadata
+        });
 
-            System.Console.WriteLine("PaymentIntent saved to MongoDB");
-            return Ok(paymentIntent.ClientSecret);
+        if (!string.IsNullOrWhiteSpace(result))
+        {
+            return Ok(result);
         }
+
         return BadRequest();
-    }
-
-
-    [HttpGet("hello")]
-    [AllowAnonymous]
-    public async Task<IActionResult> Hello()
-    {
-        await _stripeService.CreatePaymentIntentAsync(333, new Dictionary<string, string>(), "usd");
-        return Ok("Hello from PaymentsController");
     }
 }

@@ -1,60 +1,51 @@
 using KinoDev.Payment.Infrastructure.Models;
+using KinoDev.Payment.Infrastructure.Models.Bsons;
+using KinoDev.Payment.Infrastructure.Models.PaymentIntents;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
-using MongoDB.Bson.IO;
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 
 namespace KinoDev.Payment.Infrastructure.Services
 {
-    public interface IMongoDbService
-    {
-        Task Foo(string message);
-    }
-
-    public class MessageModel
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
-        public string Message { get; set; }
-    }
-
-    public class MongoDbService : IMongoDbService
+    public class MongoDbService : IDbService
     {
         private readonly IMongoDatabase _database;
+
+        private readonly string _collectionName = "PaymentIntents";
+
+        private readonly IMongoCollection<PaymentIntentBson> _paymentIntentsCollection;
 
         public MongoDbService(IOptions<MongoDbConfiguration> mongoDbConfiguration)
         {
             var client = new MongoClient(mongoDbConfiguration.Value.ConnectionString);
             _database = client.GetDatabase(mongoDbConfiguration.Value.DatabaseName);
-        }
 
-        public async Task Foo(string message)
-        {
             // Check if collection exists, create if not
-            var filter = new BsonDocument("name", "Messages");
+            var filter = new BsonDocument("name", _collectionName);
             var collections = _database.ListCollections(new ListCollectionsOptions { Filter = filter });
 
-            if (!await collections.AnyAsync())
+            if (!collections.Any())
             {
-                System.Console.WriteLine("Creating Messages collection");
-                await _database.CreateCollectionAsync("Messages");
+                _database.CreateCollection(_collectionName);
             }
 
-            var messagesCollection = _database.GetCollection<MessageModel>("Messages");
+            _paymentIntentsCollection = _database.GetCollection<PaymentIntentBson>(_collectionName);
+        }
 
-            var id = ObjectId.GenerateNewId().ToString();
-            await messagesCollection.InsertOneAsync(new MessageModel
+        public Task SavePaymentIntentAsync(GenericPaymentIntent paymentIntent)
+        {
+            var bsonPaymentIntent = new PaymentIntentBson
             {
-                Id = id,
-                Message = message
-            });
+                Id = ObjectId.GenerateNewId().ToString(),
+                Amount = paymentIntent.Amount,
+                Currency = paymentIntent.Currency,
+                Metadata = paymentIntent.Metadata,
+                PaymentProvider = paymentIntent.PaymentProvider,
+                PaymentIntentId = paymentIntent.PaymentIntentId,
+                ClientSecret = paymentIntent.ClientSecret,
+            };
 
-            var res = await messagesCollection.Find(m => m.Id == id).FirstOrDefaultAsync();
-
-            System.Console.WriteLine(res?.ToString());
+            return _paymentIntentsCollection.InsertOneAsync(bsonPaymentIntent);
         }
     }
 }
