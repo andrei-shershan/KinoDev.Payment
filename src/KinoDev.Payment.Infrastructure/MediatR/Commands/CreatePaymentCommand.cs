@@ -34,6 +34,7 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
                 ClientSecret = paymentIntent.ClientSecret,
                 Currency = paymentIntent.Currency,
                 Metadata = paymentIntent.Metadata,
+                State = paymentIntent.State
             });
 
             return paymentIntent.ClientSecret;

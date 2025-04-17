@@ -60,5 +60,22 @@ namespace KinoDev.Payment.Infrastructure.Services
         {
             return PaymentProvider.Stripe;
         }
+
+        public Task<GenericPaymentIntent> GetPaymentIntentAsync(string paymentIntentId)
+        {
+            var service = new PaymentIntentService();
+            var paymentIntent = service.Get(paymentIntentId);
+
+            return Task.FromResult(new GenericPaymentIntent()
+            {
+                PaymentIntentId = paymentIntent.Id,
+                Amount = paymentIntent.Amount / 100,
+                Currency = paymentIntent.Currency,
+                ClientSecret = paymentIntent.ClientSecret,
+                PaymentProvider = Models.PaymentIntents.PaymentProvider.Stripe,
+                Metadata = paymentIntent.Metadata,
+                State = paymentIntent.Status
+            });
+        }
     }
 }

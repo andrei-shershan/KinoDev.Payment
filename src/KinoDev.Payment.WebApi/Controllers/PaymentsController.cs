@@ -1,4 +1,5 @@
 using KinoDev.Payment.Infrastructure.MediatR.Commands;
+using KinoDev.Payment.Infrastructure.MediatR.Queries;
 using KinoDev.Payment.WebApi.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,7 @@ public class PaymentsController : ControllerBase
         _mediator = mediator;
     }
 
+    // TODO: Use REST API conventions for naming
     [HttpPost("create-payment-intent")]
     public async Task<IActionResult> CreatePaymentIntentAsync([FromBody] CreatePaymentIntentModel model)
     {
@@ -34,5 +36,21 @@ public class PaymentsController : ControllerBase
         }
 
         return BadRequest();
+    }
+
+    [HttpGet("payment-intents/{id}")]
+    public async Task<IActionResult> GetPaymentIntentAsync(string id)
+    {
+        var result = await _mediator.Send(new GetPaymentIntentQuery()
+        {
+            PaymentIntentId = id
+        });
+
+        if (result != null)
+        {
+            return Ok(result);
+        }
+
+        return NotFound();
     }
 }
