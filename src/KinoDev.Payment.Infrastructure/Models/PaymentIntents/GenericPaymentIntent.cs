@@ -9,6 +9,9 @@ namespace KinoDev.Payment.Infrastructure.Models.PaymentIntents
     public class GenericPaymentIntent
     {
         public string PaymentIntentId { get; set; }
+
+        public Guid OrderId { get; set; }
+        
         public string ClientSecret { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }

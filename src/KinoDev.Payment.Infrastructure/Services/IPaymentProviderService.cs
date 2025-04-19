@@ -10,6 +10,8 @@ namespace KinoDev.Payment.Infrastructure.Services
 
         Task<GenericPaymentIntent> GetPaymentIntentAsync(string paymentIntentId);
 
+        Task<bool> CancelPaymentIntentAsync(string paymentIntentId);
+
         PaymentProvider GetCurrentPaymentProvider();
     }
 }

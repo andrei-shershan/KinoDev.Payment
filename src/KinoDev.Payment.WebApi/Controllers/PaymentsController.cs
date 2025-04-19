@@ -19,12 +19,12 @@ public class PaymentsController : ControllerBase
         _mediator = mediator;
     }
 
-    // TODO: Use REST API conventions for naming
-    [HttpPost("create-payment-intent")]
-    public async Task<IActionResult> CreatePaymentIntentAsync([FromBody] CreatePaymentIntentModel model)
+    [HttpPost("")]
+    public async Task<IActionResult> CreatePaymentAsync([FromBody] CreatePaymentModel model)
     {
         var result = await _mediator.Send(new CreatePaymentCommand()
         {
+            OrderId = model.OrderId,
             Amount = model.Amount,
             Currency = model.Currency,
             Metadata = model.Metadata
@@ -38,8 +38,25 @@ public class PaymentsController : ControllerBase
         return BadRequest();
     }
 
-    [HttpGet("payment-intents/{id}")]
-    public async Task<IActionResult> GetPaymentIntentAsync(string id)
+    [HttpPost("{id}/complete")]
+    public async Task<IActionResult> CompletePaymentAsync(string id)
+    {
+        var result = await _mediator.Send(new CompletePaymentCommand()
+        {
+            PaymentIntentId = id
+        });
+
+        if (result != null)
+        {
+            return Ok(result);
+        }
+
+        return BadRequest();
+    }
+
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetPaymentAsync(string id)
     {
         var result = await _mediator.Send(new GetPaymentIntentQuery()
         {

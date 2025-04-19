@@ -6,6 +6,7 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
 {
     public class CreatePaymentCommand : IRequest<string>
     {
+        public Guid OrderId { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public Dictionary<string, string> Metadata { get; set; }
@@ -34,7 +35,8 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
                 ClientSecret = paymentIntent.ClientSecret,
                 Currency = paymentIntent.Currency,
                 Metadata = paymentIntent.Metadata,
-                State = paymentIntent.State
+                State = paymentIntent.State,
+                OrderId = request.OrderId
             });
 
             return paymentIntent.ClientSecret;

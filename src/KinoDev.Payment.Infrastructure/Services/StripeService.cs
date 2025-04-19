@@ -77,5 +77,21 @@ namespace KinoDev.Payment.Infrastructure.Services
                 State = paymentIntent.Status
             });
         }
+
+        public async Task<bool> CancelPaymentIntentAsync(string paymentIntentId)
+        {
+            try
+            {
+                var service = new PaymentIntentService();
+                var paymentIntent = await service.CancelAsync(paymentIntentId);
+                return paymentIntent.Status == "canceled";
+            }
+            catch (StripeException ex)
+            {
+                // TODO: Log the exception
+            }
+
+            return false;
+        }
     }
 }

@@ -1,7 +1,9 @@
 namespace KinoDev.Payment.WebApi.Models
 {
-    public class CreatePaymentIntentModel
+    public class CreatePaymentModel
     {
+        public Guid OrderId { get; set; }
+        
         public string Currency { get; set; }
 
         public int Amount { get; set; }

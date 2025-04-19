@@ -12,6 +12,8 @@ namespace KinoDev.Payment.Infrastructure.Models.Bsons
 
         public string PaymentIntentId { get; set; }
 
+        public string OrderId { get; set; }
+
         public decimal Amount { get; set; }
 
         public string ClientSecret { get; set; }
@@ -23,5 +25,7 @@ namespace KinoDev.Payment.Infrastructure.Models.Bsons
 
         [BsonRepresentation(BsonType.String)]
         public PaymentProvider PaymentProvider { get; set; }
+
+        public string State { get; set; }
     }
 }
