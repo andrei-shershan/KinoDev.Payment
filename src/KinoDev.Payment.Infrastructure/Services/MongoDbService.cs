@@ -38,7 +38,7 @@ namespace KinoDev.Payment.Infrastructure.Services
 
             var paymentIntents = await _paymentIntentsCollection.Find(filter).ToListAsync();
 
-            return paymentIntents.Select(x => new GenericPaymentIntent
+            return paymentIntents?.Select(x => new GenericPaymentIntent
             {
                 PaymentIntentId = x.PaymentIntentId,
                 OrderId = Guid.Parse(x.OrderId),

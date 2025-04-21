@@ -70,4 +70,20 @@ public class PaymentsController : ControllerBase
 
         return NotFound();
     }
+
+    [HttpPost("order/{orderId}/cancel")]
+    public async Task<IActionResult> CancelPendingOrderPayments([FromRoute] Guid orderId)
+    {
+        var result = await _mediator.Send(new CancelPendingOrderPaymentsCommand()
+        {
+            OrderId = orderId
+        });
+
+        if (result)
+        {
+            return Ok(result);
+        }
+
+        return NotFound();
+    }
 }
