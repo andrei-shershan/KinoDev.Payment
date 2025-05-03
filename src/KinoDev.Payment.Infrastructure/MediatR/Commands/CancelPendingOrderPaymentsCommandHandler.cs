@@ -1,4 +1,5 @@
-using KinoDev.Payment.Infrastructure.Services;
+using KinoDev.Payment.Infrastructure.Abstractions;
+using KinoDev.Shared.Constants;
 using MediatR;
 
 namespace KinoDev.Payment.Infrastructure.MediatR.Commands
@@ -22,18 +23,19 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
         public async Task<bool> Handle(CancelPendingOrderPaymentsCommand request, CancellationToken cancellationToken)
         {
             var payments = await _dbService.GetOrderPaymentIntentsAsync(request.OrderId);
-
             if (payments != null)
             {
                 // TODO: Review this loigic
                 foreach (var payment in payments)
                 {
                     await _paymentProviderService.CancelPaymentAsync(payment.PaymentIntentId);
-                    await _dbService.UpdatePaymentIntentStateAsync(payment.PaymentIntentId, "canceled");
+                    await _dbService.UpdatePaymentIntentStateAsync(payment.PaymentIntentId, PaymentStates.Canceled);
                 }
+
+                return true;
             }
 
-            return true;
+            return false;
         }
     }
 }

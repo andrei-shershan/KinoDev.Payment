@@ -1,6 +1,7 @@
+using KinoDev.Payment.Infrastructure.Abstractions;
 using KinoDev.Payment.Infrastructure.Models;
 using KinoDev.Payment.Infrastructure.Models.Bsons;
-using KinoDev.Payment.Infrastructure.Models.PaymentIntents;
+using KinoDev.Shared.DtoModels.PaymentIntents;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -55,22 +56,22 @@ namespace KinoDev.Payment.Infrastructure.Services
         {
             var filter = Builders<PaymentIntentBson>.Filter.Eq(x => x.PaymentIntentId, paymentIntentId);
 
-            var found = await _paymentIntentsCollection.Find(filter).FirstOrDefaultAsync();
-            if (found == null)
+            var paymentIntent = await _paymentIntentsCollection.Find(filter).FirstOrDefaultAsync();
+            if (paymentIntent == null)
             {
                 return null;
             }
 
             return new GenericPaymentIntent
             {
-                PaymentIntentId = found.PaymentIntentId,
-                OrderId = Guid.Parse(found.OrderId),
-                ClientSecret = found.ClientSecret,
-                Amount = found.Amount,
-                Currency = found.Currency,
-                Metadata = found.Metadata,
-                State = found.State,
-                PaymentProvider = found.PaymentProvider
+                PaymentIntentId = paymentIntent.PaymentIntentId,
+                OrderId = Guid.Parse(paymentIntent.OrderId),
+                ClientSecret = paymentIntent.ClientSecret,
+                Amount = paymentIntent.Amount,
+                Currency = paymentIntent.Currency,
+                Metadata = paymentIntent.Metadata,
+                State = paymentIntent.State,
+                PaymentProvider = paymentIntent.PaymentProvider
             };
         }
 

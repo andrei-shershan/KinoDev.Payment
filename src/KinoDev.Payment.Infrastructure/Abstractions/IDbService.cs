@@ -1,6 +1,6 @@
-using KinoDev.Payment.Infrastructure.Models.PaymentIntents;
+using KinoDev.Shared.DtoModels.PaymentIntents;
 
-namespace KinoDev.Payment.Infrastructure.Services
+namespace KinoDev.Payment.Infrastructure.Abstractions
 {
     public interface IDbService
     {

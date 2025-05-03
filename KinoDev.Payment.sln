@@ -6,6 +6,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KinoDev.Payment.WebApi", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KinoDev.Payment.Infrastructure", "src\KinoDev.Payment.Infrastructure\KinoDev.Payment.Infrastructure.csproj", "{054265CC-1E84-4CB4-987B-07ABD71699DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinoDev.Payments.UnitTests", "tests\KinoDev.Payments.UnitTests\KinoDev.Payments.UnitTests.csproj", "{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +22,15 @@ Global
 		{054265CC-1E84-4CB4-987B-07ABD71699DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{054265CC-1E84-4CB4-987B-07ABD71699DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{054265CC-1E84-4CB4-987B-07ABD71699DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {334D2F01-76A4-4329-B89B-BC6AC97C2BBE}
 	EndGlobalSection
 EndGlobal

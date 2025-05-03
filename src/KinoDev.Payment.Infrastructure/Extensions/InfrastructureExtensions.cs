@@ -1,3 +1,4 @@
+using KinoDev.Payment.Infrastructure.Abstractions;
 using KinoDev.Payment.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;

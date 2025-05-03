@@ -1,5 +1,5 @@
-using KinoDev.Payment.Infrastructure.Models.PaymentIntents;
-using KinoDev.Payment.Infrastructure.Services;
+using KinoDev.Payment.Infrastructure.Abstractions;
+using KinoDev.Shared.DtoModels.PaymentIntents;
 using MediatR;
 
 namespace KinoDev.Payment.Infrastructure.MediatR.Queries
@@ -20,13 +20,7 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Queries
 
         public async Task<GenericPaymentIntent> Handle(GetPaymentIntentQuery request, CancellationToken cancellationToken)
         {
-            var paymentIntent = await _paymentProviderService.GetPaymentIntentAsync(request.PaymentIntentId);
-            if (paymentIntent == null)
-            {
-                return null;
-            }
-
-            return paymentIntent;
+            return await _paymentProviderService.GetPaymentIntentAsync(request.PaymentIntentId);
         }
     }
 }

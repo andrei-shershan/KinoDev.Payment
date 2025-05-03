@@ -1,4 +1,4 @@
-using KinoDev.Payment.Infrastructure.Models.PaymentIntents;
+using KinoDev.Shared.Enums;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -18,7 +18,8 @@ namespace KinoDev.Payment.Infrastructure.Models.Bsons
 
         public string ClientSecret { get; set; }
 
-        public string Currency { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public Currency Currency { get; set; }
 
         [BsonElement("Metadata")]
         public Dictionary<string, string> Metadata { get; set; }

@@ -1,6 +1,7 @@
 using KinoDev.Payment.Infrastructure.MediatR.Commands;
 using KinoDev.Payment.Infrastructure.MediatR.Queries;
 using KinoDev.Payment.WebApi.Models;
+using KinoDev.Shared.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,16 +27,16 @@ public class PaymentsController : ControllerBase
         {
             OrderId = model.OrderId,
             Amount = model.Amount,
-            Currency = model.Currency,
+            Currency = Currency.USD, // TODO: USD for now, need to be dynamic
             Metadata = model.Metadata
         });
 
-        if (!string.IsNullOrWhiteSpace(result))
+        if (string.IsNullOrWhiteSpace(result))
         {
-            return Ok(result);
+            return BadRequest();
         }
 
-        return BadRequest();
+        return Ok(result);
     }
 
     [HttpPost("{id}/complete")]
@@ -84,6 +85,6 @@ public class PaymentsController : ControllerBase
             return Ok(result);
         }
 
-        return NotFound();
+        return BadRequest();
     }
 }

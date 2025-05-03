@@ -12,7 +12,6 @@ namespace KinoDev.Payment.WebApi.Extensions
             AuthenticationSettings authenticationSettings
             )
         {
-            System.Console.WriteLine("Setting up authentication" + authenticationSettings.Secret + authenticationSettings.Issuer + authenticationSettings.Audiences.Internal);
             services
                 .AddAuthentication(options =>
                 {

@@ -1,5 +1,6 @@
-using KinoDev.Payment.Infrastructure.Models.PaymentIntents;
-using KinoDev.Payment.Infrastructure.Services;
+using KinoDev.Payment.Infrastructure.Abstractions;
+using KinoDev.Shared.DtoModels.PaymentIntents;
+using KinoDev.Shared.Enums;
 using MediatR;
 
 namespace KinoDev.Payment.Infrastructure.MediatR.Commands
@@ -8,7 +9,7 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
     {
         public Guid OrderId { get; set; }
         public decimal Amount { get; set; }
-        public string Currency { get; set; }
+        public Currency Currency { get; set; }
         public Dictionary<string, string> Metadata { get; set; }
     }
 
@@ -26,6 +27,10 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
         public async Task<string> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
             var paymentIntent = await _paymentProviderService.CreatePaymentIntentAsync(request.Amount, request.Metadata, request.Currency);
+            if (paymentIntent == null)
+            {
+                return null;
+            }
 
             await _dbService.SavePaymentIntentAsync(new GenericPaymentIntent()
             {

@@ -3,7 +3,6 @@ using KinoDev.Payment.Infrastructure.Models;
 using KinoDev.Payment.WebApi.ConfigurationSettings;
 using KinoDev.Payment.WebApi.Extensions;
 using Microsoft.IdentityModel.Protocols.Configuration;
-using MongoDB.Driver.Core.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 

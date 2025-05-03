@@ -1,5 +1,6 @@
-using KinoDev.Payment.Infrastructure.Models.PaymentIntents;
-using KinoDev.Payment.Infrastructure.Services;
+using KinoDev.Payment.Infrastructure.Abstractions;
+using KinoDev.Shared.Constants;
+using KinoDev.Shared.DtoModels.PaymentIntents;
 using MediatR;
 
 namespace KinoDev.Payment.Infrastructure.MediatR.Commands
@@ -29,7 +30,7 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
                 return null;
             }
 
-            await _dbService.UpdatePaymentIntentStateAsync(paymentIntent.PaymentIntentId, "succeeded");
+            await _dbService.UpdatePaymentIntentStateAsync(paymentIntent.PaymentIntentId, PaymentStates.Succeeded);
 
             return await _dbService.GetPaymentIntentAsync(request.PaymentIntentId);
         }
