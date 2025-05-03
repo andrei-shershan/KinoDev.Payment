@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KinoDev.Payment.WebApi", "src\KinoDev.Payment.WebApi\KinoDev.Payment.WebApi.csproj", "{F1D89596-53E0-406E-A580-8CF8C26C64F8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KinoDev.Payment.Infrastructure", "src\KinoDev.Payment.Infrastructure\KinoDev.Payment.Infrastructure.csproj", "{054265CC-1E84-4CB4-987B-07ABD71699DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinoDev.Payments.UnitTests", "tests\KinoDev.Payments.UnitTests\KinoDev.Payments.UnitTests.csproj", "{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1D89596-53E0-406E-A580-8CF8C26C64F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1D89596-53E0-406E-A580-8CF8C26C64F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1D89596-53E0-406E-A580-8CF8C26C64F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1D89596-53E0-406E-A580-8CF8C26C64F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{054265CC-1E84-4CB4-987B-07ABD71699DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{054265CC-1E84-4CB4-987B-07ABD71699DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{054265CC-1E84-4CB4-987B-07ABD71699DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{054265CC-1E84-4CB4-987B-07ABD71699DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{050FEF87-4ED8-48DD-B76F-D1564A18DD9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {334D2F01-76A4-4329-B89B-BC6AC97C2BBE}
+	EndGlobalSection
+EndGlobal
