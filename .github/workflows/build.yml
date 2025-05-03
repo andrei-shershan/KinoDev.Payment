@@ -15,7 +15,10 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
-        
+
+    - name: Restore dependencies
+      run: dotnet restore --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+
     - name: Restore dependencies
       run: dotnet restore
       
