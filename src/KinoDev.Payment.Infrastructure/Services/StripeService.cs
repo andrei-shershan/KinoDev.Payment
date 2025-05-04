@@ -6,6 +6,7 @@ using KinoDev.Shared.DtoModels.PaymentIntents;
 using KinoDev.Shared.Enums;
 using KinoDev.Shared.Extensions;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using Stripe;
 
 namespace KinoDev.Payment.Infrastructure.Services
@@ -13,15 +14,18 @@ namespace KinoDev.Payment.Infrastructure.Services
     public class StripeService : IPaymentProviderService
     {
         private readonly StripeSettings _stripeSettings;
+        private readonly ILogger<StripeService> _logger;
 
-        public StripeService(IOptions<StripeSettings> options)
+        public StripeService(IOptions<StripeSettings> options, ILogger<StripeService> logger)
         {
             _stripeSettings = options.Value;
+            _logger = logger;
             StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
         }
 
-        public async Task<GenericPaymentIntent> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string> metadata, Currency currency)
+        public async Task<GenericPaymentIntent?> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string> metadata, Currency currency)
         {
+            _logger.LogInformation("Creating Stripe payment intent. Amount: {Amount}, Currency: {Currency}", amount, currency);
             var options = new PaymentIntentCreateOptions
             {
                 Amount = (long)(amount * 100), // Convert to cents
@@ -48,9 +52,14 @@ namespace KinoDev.Payment.Infrastructure.Services
                     Metadata = stripPaymentIntent.Metadata
                 };
             }
+            catch (StripeException ex)
+            {
+                _logger.LogError(ex, "Failed to create Stripe payment intent. Amount: {Amount}, Currency: {Currency}", amount, currency);
+                return null;
+            }
             catch (Exception ex)
             {
-                // TODO: Log the exception
+                _logger.LogError(ex, "Unexpected error creating Stripe payment intent. Amount: {Amount}, Currency: {Currency}", amount, currency);
                 return null;
             }
 
@@ -64,9 +73,14 @@ namespace KinoDev.Payment.Infrastructure.Services
                 var paymentIntent = await service.GetAsync(paymentIntentId);
                 return paymentIntent.Status == PaymentStates.Succeeded;
             }
+            catch (StripeException ex)
+            {
+                _logger.LogError(ex, "Failed to confirm Stripe payment. PaymentIntentId: {PaymentIntentId}", paymentIntentId);
+                return false;
+            }
             catch (Exception ex)
             {
-                // TODO: Log the exception
+                _logger.LogError(ex, "Unexpected error confirming Stripe payment. PaymentIntentId: {PaymentIntentId}", paymentIntentId);
                 return false;
             }
         }
@@ -79,9 +93,14 @@ namespace KinoDev.Payment.Infrastructure.Services
                 var paymentIntent = await service.CancelAsync(paymentIntentId);
                 return paymentIntent.Status == PaymentStates.Canceled;
             }
+            catch (StripeException ex)
+            {
+                _logger.LogError(ex, "Failed to cancel Stripe payment. PaymentIntentId: {PaymentIntentId}", paymentIntentId);
+                return false;
+            }
             catch (Exception ex)
             {
-                // TODO: Log the exception
+                _logger.LogError(ex, "Unexpected error canceling Stripe payment. PaymentIntentId: {PaymentIntentId}", paymentIntentId);
                 return false;
             }
         }
@@ -91,7 +110,7 @@ namespace KinoDev.Payment.Infrastructure.Services
             return PaymentProvider.Stripe;
         }
 
-        public async Task<GenericPaymentIntent> GetPaymentIntentAsync(string paymentIntentId)
+        public async Task<GenericPaymentIntent?> GetPaymentIntentAsync(string paymentIntentId)
         {
             var service = new PaymentIntentService();
 
@@ -110,9 +129,14 @@ namespace KinoDev.Payment.Infrastructure.Services
                     State = paymentIntent.Status
                 };
             }
+            catch (StripeException ex)
+            {
+                _logger.LogError(ex, "Failed to get Stripe payment intent. PaymentIntentId: {PaymentIntentId}", paymentIntentId);
+                return null;
+            }
             catch (Exception ex)
             {
-                //TODO: Log the exception
+                _logger.LogError(ex, "Unexpected error getting Stripe payment intent. PaymentIntentId: {PaymentIntentId}", paymentIntentId);
                 return null;
             }
         }
@@ -127,10 +151,14 @@ namespace KinoDev.Payment.Infrastructure.Services
             }
             catch (StripeException ex)
             {
-                // TODO: Log the exception
+                _logger.LogError(ex, "Failed to cancel Stripe payment intent. PaymentIntentId: {PaymentIntentId}", paymentIntentId);
+                return false;
             }
-
-            return false;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error canceling Stripe payment intent. PaymentIntentId: {PaymentIntentId}", paymentIntentId);
+                return false;
+            }
         }
     }
 }
