@@ -10,7 +10,7 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
         public Guid OrderId { get; set; }
         public decimal Amount { get; set; }
         public Currency Currency { get; set; }
-        public Dictionary<string, string> Metadata { get; set; }
+        public Dictionary<string, string>? Metadata { get; set; }
     }
 
     public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, string>

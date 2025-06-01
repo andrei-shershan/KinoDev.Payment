@@ -20,7 +20,7 @@ public class PaymentsController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("")]
+    [HttpPost]
     public async Task<IActionResult> CreatePaymentAsync([FromBody] CreatePaymentModel model)
     {
         var result = await _mediator.Send(new CreatePaymentCommand()
@@ -40,7 +40,7 @@ public class PaymentsController : ControllerBase
     }
 
     [HttpPost("{id}/complete")]
-    public async Task<IActionResult> CompletePaymentAsync(string id)
+    public async Task<IActionResult> CompletePaymentAsync([FromRoute] string id)
     {
         var result = await _mediator.Send(new CompletePaymentCommand()
         {
@@ -57,7 +57,7 @@ public class PaymentsController : ControllerBase
 
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetPaymentAsync(string id)
+    public async Task<IActionResult> GetPaymentAsync([FromRoute] string id)
     {
         var result = await _mediator.Send(new GetPaymentIntentQuery()
         {

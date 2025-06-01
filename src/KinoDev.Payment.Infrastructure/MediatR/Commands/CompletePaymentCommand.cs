@@ -5,10 +5,9 @@ using MediatR;
 
 namespace KinoDev.Payment.Infrastructure.MediatR.Commands
 {
-
     public class CompletePaymentCommand : IRequest<GenericPaymentIntent>
     {
-        public string PaymentIntentId { get; set; }
+        public string? PaymentIntentId { get; set; }
     }
 
     public class CompletePaymentHandler : IRequestHandler<CompletePaymentCommand, GenericPaymentIntent>
@@ -24,6 +23,11 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
 
         public async Task<GenericPaymentIntent> Handle(CompletePaymentCommand request, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(request.PaymentIntentId))
+            {
+                throw new ArgumentException("PaymentIntentId cannot be null or empty.", nameof(request.PaymentIntentId));
+            }
+
             var paymentIntent = await _dbService.GetPaymentIntentAsync(request.PaymentIntentId);
             if (paymentIntent == null)
             {

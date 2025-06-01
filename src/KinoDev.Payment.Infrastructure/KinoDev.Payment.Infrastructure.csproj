@@ -11,7 +11,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.3" />
     <PackageReference Include="MongoDB.Driver" Version="3.2.1" />
-    <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Stripe.net" Version="43.6.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="KinoDev.Shared" Version="1.12.0" />

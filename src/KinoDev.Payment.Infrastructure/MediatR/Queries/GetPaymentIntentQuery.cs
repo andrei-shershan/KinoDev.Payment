@@ -6,10 +6,10 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Queries
 {
     public class GetPaymentIntentQuery : IRequest<GenericPaymentIntent>
     {
-        public string PaymentIntentId { get; set; }
+        public string? PaymentIntentId { get; set; }
     }
 
-    public class GetPaymentIntentHandler : IRequestHandler<GetPaymentIntentQuery, GenericPaymentIntent>
+    public class GetPaymentIntentHandler : IRequestHandler<GetPaymentIntentQuery, GenericPaymentIntent?>
     {
         private readonly IPaymentProviderService _paymentProviderService;
 
@@ -18,7 +18,7 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Queries
             _paymentProviderService = paymentProviderService;
         }
 
-        public async Task<GenericPaymentIntent> Handle(GetPaymentIntentQuery request, CancellationToken cancellationToken)
+        public async Task<GenericPaymentIntent?> Handle(GetPaymentIntentQuery request, CancellationToken cancellationToken)
         {
             return await _paymentProviderService.GetPaymentIntentAsync(request.PaymentIntentId);
         }

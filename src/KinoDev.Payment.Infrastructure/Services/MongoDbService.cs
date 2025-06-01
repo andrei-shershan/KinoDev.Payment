@@ -24,7 +24,6 @@ namespace KinoDev.Payment.Infrastructure.Services
             // Check if collection exists, create if not
             var filter = new BsonDocument("name", _collectionName);
             var collections = _database.ListCollections(new ListCollectionsOptions { Filter = filter });
-
             if (!collections.Any())
             {
                 _database.CreateCollection(_collectionName);
