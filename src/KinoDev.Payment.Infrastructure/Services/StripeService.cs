@@ -23,7 +23,7 @@ namespace KinoDev.Payment.Infrastructure.Services
             StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
         }
 
-        public async Task<GenericPaymentIntent?> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string> metadata, Currency currency)
+        public async Task<GenericPaymentIntent?> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string>? metadata, Currency currency)
         {
             _logger.LogInformation("Creating Stripe payment intent. Amount: {Amount}, Currency: {Currency}", amount, currency);
             var options = new PaymentIntentCreateOptions
@@ -46,7 +46,7 @@ namespace KinoDev.Payment.Infrastructure.Services
                 {
                     PaymentIntentId = stripPaymentIntent.Id,
                     Amount = stripPaymentIntent.Amount / 100,
-                    Currency = Enum.Parse<Currency>(stripPaymentIntent.Currency, ignoreCase: true), // TODO: Check if this is correct
+                    Currency = Enum.Parse<Currency>(stripPaymentIntent.Currency, ignoreCase: true),
                     ClientSecret = stripPaymentIntent.ClientSecret,
                     PaymentProvider = PaymentProvider.Stripe,
                     Metadata = stripPaymentIntent.Metadata
@@ -62,7 +62,6 @@ namespace KinoDev.Payment.Infrastructure.Services
                 _logger.LogError(ex, "Unexpected error creating Stripe payment intent. Amount: {Amount}, Currency: {Currency}", amount, currency);
                 return null;
             }
-
         }
 
         public async Task<bool> ConfirmPaymentAsync(string paymentIntentId)
@@ -112,10 +111,10 @@ namespace KinoDev.Payment.Infrastructure.Services
 
         public async Task<GenericPaymentIntent?> GetPaymentIntentAsync(string paymentIntentId)
         {
-            var service = new PaymentIntentService();
-
             try
             {
+                var service = new PaymentIntentService();
+
                 var paymentIntent = await service.GetAsync(paymentIntentId);
 
                 return new GenericPaymentIntent()

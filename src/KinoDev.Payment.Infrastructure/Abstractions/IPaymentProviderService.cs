@@ -5,7 +5,7 @@ namespace KinoDev.Payment.Infrastructure.Abstractions
 {
     public interface IPaymentProviderService
     {
-        Task<GenericPaymentIntent?> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string> metadata, Currency currency);
+        Task<GenericPaymentIntent?> CreatePaymentIntentAsync(decimal amount, Dictionary<string, string>? metadata, Currency currency);
         
         Task<bool> ConfirmPaymentAsync(string paymentIntentId);
         

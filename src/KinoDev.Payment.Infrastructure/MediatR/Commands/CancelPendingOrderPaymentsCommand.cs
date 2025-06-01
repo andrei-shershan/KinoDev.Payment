@@ -12,6 +12,7 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
     public class CancelPendingOrderPaymentsCommandHandler : IRequestHandler<CancelPendingOrderPaymentsCommand, bool>
     {
         private readonly IPaymentProviderService _paymentProviderService;
+        
         private readonly IDbService _dbService;
 
         public CancelPendingOrderPaymentsCommandHandler(IPaymentProviderService paymentProviderService, IDbService dbService)

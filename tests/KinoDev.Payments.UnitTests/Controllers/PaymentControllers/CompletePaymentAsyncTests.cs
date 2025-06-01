@@ -2,7 +2,6 @@ using KinoDev.Payment.Infrastructure.MediatR.Commands;
 using KinoDev.Shared.DtoModels.PaymentIntents;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Xunit;
 
 namespace KinoDev.Payments.UnitTests.Controllers.PaymentControllers;
 
