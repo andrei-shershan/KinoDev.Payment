@@ -6,6 +6,9 @@ using Microsoft.IdentityModel.Protocols.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Application Insights telemetry collection
+builder.Services.AddApplicationInsightsTelemetry();
+
 builder.Services.InitializeInfrastructure();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
