@@ -15,14 +15,20 @@ public class PaymentsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public PaymentsController(IMediator mediator)
+    private ILogger<PaymentsController> _logger;
+
+    public PaymentsController(IMediator mediator, ILogger<PaymentsController> logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreatePaymentAsync([FromBody] CreatePaymentModel model)
     {
+        _logger.LogInformation("Creating payment for OrderId: {OrderId}, Amount: {Amount}, Metadata: {Metadata}",
+            model.OrderId, model.Amount, model.Metadata);
+
         var result = await _mediator.Send(new CreatePaymentCommand()
         {
             OrderId = model.OrderId,

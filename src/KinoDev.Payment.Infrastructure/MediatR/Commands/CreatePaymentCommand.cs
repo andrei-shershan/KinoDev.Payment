@@ -2,6 +2,7 @@ using KinoDev.Payment.Infrastructure.Abstractions;
 using KinoDev.Shared.DtoModels.PaymentIntents;
 using KinoDev.Shared.Enums;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace KinoDev.Payment.Infrastructure.MediatR.Commands
 {
@@ -18,15 +19,23 @@ namespace KinoDev.Payment.Infrastructure.MediatR.Commands
         private readonly IPaymentProviderService _paymentProviderService;
         private readonly IDbService _dbService;
 
-        public CreatePaymentCommandHandler(IPaymentProviderService paymentProviderService, IDbService dbService)
+        private readonly ILogger<CreatePaymentCommandHandler> _logger;
+
+        public CreatePaymentCommandHandler(
+            IPaymentProviderService paymentProviderService,
+            IDbService dbService,
+            ILogger<CreatePaymentCommandHandler> logger)
         {
             _paymentProviderService = paymentProviderService;
             _dbService = dbService;
+            _logger = logger;
         }
 
         public async Task<string> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
             var paymentIntent = await _paymentProviderService.CreatePaymentIntentAsync(request.Amount, request.Metadata, request.Currency);
+            _logger.LogInformation("Created payment intent for OrderId: {OrderId}, Amount: {Amount}, Currency: {Currency}, ClientSecret: {ClientSecret}",
+                request.OrderId, request.Amount, request.Currency, paymentIntent?.ClientSecret);
             if (paymentIntent == null)
             {
                 return null;
