@@ -93,17 +93,4 @@ public class PaymentsController : ControllerBase
 
         return BadRequest();
     }
-
-    [HttpGet("test")]
-    public IActionResult Test()
-    {
-        return Ok("Payments API is working");
-    }
-
-    [AllowAnonymous]
-    [HttpGet("test2")]
-    public IActionResult Test2()
-    {
-        return Ok("Payments API is working 2");
-    }
 }
